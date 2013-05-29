@@ -14,6 +14,8 @@ results = ""
 client = soundcloud.Client(client_id='af912f440f0d027065e7351089b08a52')
 
 def dosearch(searchstr):
+    global ResultsLeft
+    ResultsLeft = 8000
     output = ""
     favdict.clear()
     offsetval = 0
