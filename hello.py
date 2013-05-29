@@ -13,7 +13,9 @@ def hello():
 def search():
 	if request.method == 'POST':
 		#result = str(request.form)
-		result = dosearch(request.form['searchstr'])
+		input = request.form['searchstr']
+		print "searching " + input
+		result = dosearch(input)
 		return render_template('index.html', result=result)
 	return render_template('index.html', result="")
     
