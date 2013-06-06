@@ -74,6 +74,7 @@ class Searcher:
 				tracks = self.client.get('/tracks', q=searchstr, tags=taglist,limit=200,offset=offsetnum,duration={'to':480000})
 				#print "got result"
 				if(len(tracks) < 1): 
+					self.ResultsLeft -= 200
 					return
 				for track in tracks:
 						try:
