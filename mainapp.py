@@ -1,6 +1,6 @@
 import os
 from flask import Flask, request, render_template
-from scsearchfast import dosearch
+from scsearchfast import Searcher
 
 app = Flask(__name__)
 
@@ -26,7 +26,8 @@ def search():
 		input = request.form['searchstr']
 		sorttype = request.form['sort']
 		print "searching " + input + " on " + sorttype
-		result = dosearch(input,sorttype)
+		searcher = Searcher()
+		result = searcher.dosearch(input,sorttype)
 		return render_template('index.html', result=result)
 	return render_template('index.html', result="")
     
