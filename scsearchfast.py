@@ -13,7 +13,7 @@ results = ""
 
 client = soundcloud.Client(client_id='af912f440f0d027065e7351089b08a52')
 
-def dosearch(searchstr):
+def dosearch(searchstr,sorttype):
     global ResultsLeft
     ResultsLeft = 8000
     output = ""
@@ -24,17 +24,17 @@ def dosearch(searchstr):
     t.daemon = True
     t.start()
 
-    tp = ThreadPool.ThreadPool(10,20)
+    tp = ThreadPool.ThreadPool(15,20)
 
     while(offsetval < 8000):
-        tp.add_job(GetTracks,[searchstr,offsetval])
+        tp.add_job(GetTracks,[searchstr,offsetval,sorttype])
         offsetval += 200
     starttime = time()
     #kill if shit takes longer than a minute
     while ((ResultsLeft>0) and (time()-starttime < 20.0)):
         print "%s" % (ResultsLeft)
-        print time()-starttime
-        sleep(0.25)
+        sleep(0.50)
+    print time()-starttime    
     print "facdict is " + str(len(favdict.keys())) + " long"
     
 
@@ -59,7 +59,7 @@ def worker():
         q.task_done()
 
 
-def GetTracks(searchstr,offsetnum):
+def GetTracks(searchstr,offsetnum,sorttype):
     global ResultsLeft
     usePlayCount = True
     taglist = []
@@ -73,14 +73,16 @@ def GetTracks(searchstr,offsetnum):
                 return
             for track in tracks:
                     try:
-                        if(usePlayCount):
+                        if(sorttype == u'plays'):
                             q.put((track.id,track.playback_count))
                             #favdict[track.permalink_url] = track.playback_count
-                        else:
-                            #favdict[track.permalink_url] = track.favoritings_count
-                            if(track.playback_count > 100):
+                        elif(sorttype == u'favorites'):
+                            q.put((track.id,track.favoritings_count))
+                        elif(sorttype == u'hype'):
+                            if(track.playback_count > 500):
                                 q.put((track.id,float(track.favoritings_count) / float(track.playback_count)))
-                                #favdict[track.permalink_url] = float(track.favoritings_count) / float(track.playback_count)
+                        else:
+                            q.put((track.id,track.playback_count))
                     except AttributeError:
                         continue
             ResultsLeft -= 200
