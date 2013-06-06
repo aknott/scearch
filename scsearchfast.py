@@ -34,7 +34,7 @@ class Searcher:
 			self.tp.add_job(self.GetTracks,[searchstr,offsetval,sorttype])
 			offsetval += 200
 		starttime = time()
-		#kill if shit takes longer than a minute
+		#kill if shit takes longer than 20 seconds
 		while ((self.ResultsLeft>0) and (time()-starttime < 20.0)):
 			print "%s" % (self.ResultsLeft)
 			sleep(0.50)
@@ -46,7 +46,11 @@ class Searcher:
 		sorted_x.reverse()
 
 		if(len(sorted_x) > 0):
-			for i in range(0,10):
+			if(len(sorted_x) < 20):
+				numresults = len(sorted_x)
+			else:
+				numresults = 20
+			for i in range(0,numresults):
 				trackid = sorted_x[i][0]
 				widget = "<iframe width=\"100%\" height=\"166\" scrolling=\"no\" frameborder=\"no\" src=\"http://w.soundcloud.com/player/?url=http%3A%2F%2Fapi.soundcloud.com%2Ftracks%2F"+str(trackid)+ "\"></iframe>"
 				try:
