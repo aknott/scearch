@@ -4,7 +4,7 @@ from scsearchfast import dosearch
 
 app = Flask(__name__)
 
-@app.route('/', methods=['GET'])
+@app.route('/', methods=['POST','GET'])
 def mainapp():
 	if request.method == 'POST':
 		result=""
