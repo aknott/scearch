@@ -2,12 +2,13 @@ import soundcloud
 import operator
 import ThreadPool
 from time import sleep, time
-from threading import Thread
+from threading import Thread, Lock
 from Queue import Queue
 
 ResultsLeft = 8000
 q = Queue()
 favdict = {}
+lockobj = Lock()
 
 results = ""
 
@@ -85,13 +86,17 @@ def GetTracks(searchstr,offsetnum,sorttype):
                             q.put((track.id,track.playback_count))
                     except AttributeError:
                         continue
+            lockobj.acquire()
             ResultsLeft -= 200
+            lockobj.release()
             return
         except Exception, excep:
             #results += 200
             retries += 1
             print "error getting tracks %i! %s, retry count=%i" % (offsetnum,str(excep),retries)
+    lockobj.acquire()
     ResultsLeft -= 200
-    
+    lockobj.release()
+
 #GetTracks(client,"bam bam",0)
 #dosearch('bam bam')
