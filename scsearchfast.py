@@ -81,7 +81,7 @@ def GetTracks(searchstr,offsetnum,sorttype):
                             q.put((track.id,track.favoritings_count))
                         elif(sorttype == u'hype'):
                             if(track.playback_count > 500):
-                                q.put((track.id,float(track.favoritings_count) / float(track.playback_count)))
+                                q.put((track.id,track.playback_count**(float(track.favoritings_count) / float(track.playback_count))))
                         else:
                             q.put((track.id,track.playback_count))
                     except AttributeError:
