@@ -61,8 +61,8 @@ A Better Soundcloud Search
 </br>
 <div class="row">
 <div id="inputdiv" class="span9">
-    <form id="searchform" method="POST" action="search">
-            <input type="text" name="searchstr" id="searchinput" class="input-searchbar" onClick="this.select();" placeholder="Search" onkeydown="if (event.keyCode == 13) document.getElementById('search').click()">
+    <form id="searchform">
+            <input type="text" name="searchstr" id="searchinput" class="input-searchbar" onClick="this.select();" placeholder="Search" onkeydown="if (event.keyCode == 13) document.getElementById('search').click()" value="{{input}}">
             <button type="submit" id="searchbtn" class="btn">Search</button>
             <div class="row">
                 <div id="sortdiv">
@@ -74,7 +74,7 @@ A Better Soundcloud Search
                 </div>
                 </div>
             </div>   
-            <input name="sort" type="hidden" id="sortvalue"/>
+            <input name="sort" type="hidden" id="sortvalue" value="plays"/>
     </form>
 </div>
 </div>
