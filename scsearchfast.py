@@ -20,8 +20,6 @@ class Searcher:
 		
 
 	def dosearch(self,searchstr,sorttype):
-		#global ResultsLeft
-		#ResultsLeft = 8000
 		output = ""
 		self.favdict.clear()
 		offsetval = 0
@@ -78,9 +76,7 @@ class Searcher:
 			exactString = True
 		while(retries < 3):
 			try:
-				#print "get %i" % offsetnum
 				tracks = self.client.get('/tracks', q=searchstr, tags=taglist,limit=200,offset=offsetnum,duration={'to':480000})
-				#print "got result"
 				if(len(tracks) < 1): 
 					self.lockobj.acquire()
 					self.ResultsLeft -= 200
@@ -94,7 +90,6 @@ class Searcher:
 									continue
 							if(sorttype == u'plays'):
 								self.q.put((track.id,track.playback_count))
-								#favdict[track.permalink_url] = track.playback_count
 							elif(sorttype == u'favorites'):
 								self.q.put((track.id,track.favoritings_count))
 							elif(sorttype == u'hype'):
@@ -115,5 +110,3 @@ class Searcher:
 		self.ResultsLeft -= 200
 		self.lockobj.release()
 
-	#GetTracks(client,"bam bam",0)
-	#dosearch('bam bam')
