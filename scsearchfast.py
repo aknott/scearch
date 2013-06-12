@@ -69,9 +69,11 @@ class Searcher:
 
 	def GetTracks(self,searchstr,offsetnum,sorttype):
 		global ResultsLeft
-		usePlayCount = True
+		exactString = False
 		taglist = []
 		retries = 0
+		if(searchstr.startswith(r'"') and searchstr.endswith(r'"')):
+			exactString = True
 		while(retries < 3):
 			try:
 				#print "get %i" % offsetnum
@@ -84,6 +86,10 @@ class Searcher:
 					return
 				for track in tracks:
 						try:
+							if(exactString):
+								info = "%s %s" % (track.title,track.description)
+								if(searchstr.lower() not in info.lower()):
+									continue
 							if(sorttype == u'plays'):
 								self.q.put((track.id,track.playback_count))
 								#favdict[track.permalink_url] = track.playback_count
