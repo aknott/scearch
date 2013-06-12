@@ -73,6 +73,8 @@ class Searcher:
 		taglist = []
 		retries = 0
 		if(searchstr.startswith(r'"') and searchstr.endswith(r'"')):
+			#strip quotes
+			searchstr = searchstr[1:-1]
 			exactString = True
 		while(retries < 3):
 			try:
