@@ -8,9 +8,15 @@
      margin-right: auto;
 }
 
+#header {
+	text-align:center;
+}
+
 #main {
  margin:0 auto;
  float:none;
+ position:relative;
+ top:30px;
 }
 
 #inputdiv{
@@ -72,12 +78,14 @@
 
 
 
-<div id="main" class="span9" style="position:relative;top:30px">
-<center>
+<div id="main" class="span9">
+<div class="row">
+<div id="header">
 <h2>SCEARCH</h2>
 A Better Soundcloud Search
-</center>
-</br>
+</div>
+</div>
+<br>
 <div class="row">
 <div id="inputdiv" >
     <form id="searchform">
