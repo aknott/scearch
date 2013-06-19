@@ -4,6 +4,7 @@ import ThreadPool
 from time import sleep, time, strptime, mktime
 from threading import Thread, Lock
 from Queue import Queue
+import sys,os
 
 
 class Searcher:
@@ -60,9 +61,13 @@ class Searcher:
 		
 	def worker(self):
 		while True:
-			item = self.q.get()
-			self.favdict[item[0]] = item[1]
-			self.q.task_done()
+			try:
+				item = self.q.get()
+				self.favdict[item[0]] = item[1]
+				self.q.task_done()
+			except Exception as exp:
+				print exp
+				continue
 
 
 	def GetTracks(self,searchstr,offsetnum,sorttype):
@@ -84,26 +89,31 @@ class Searcher:
 					return
 				for track in tracks:
 					try:
+						trackid = track.id
+						sort_criteria = 0
 						if(exactString):
 							info = "%s %s" % (track.title,track.description)
 							if(searchstr.lower() not in info.lower()):
 								continue
 						if(sorttype == u'plays'):
-							self.q.put((track.id,track.playback_count))
+							sort_criteria = track.playback_count
 						elif(sorttype == u'favorites'):
-							self.q.put((track.id,track.favoritings_count))
+							sort_criteria = track.favoritings_count
 						elif(sorttype == u'hype'):
-							if(track.playback_count > 500):
-								self.q.put((track.id,track.playback_count**(float(track.favoritings_count) / float(track.playback_count))))
+							#only calculate hype on tracks with more than 300 plays 
+							#due to ratio values going too high with low playback
+							if(track.playback_count > 300):
+								sort_criteria = track.playback_count**(float(track.favoritings_count) / float(track.playback_count))
+								self.q.put((trackid,sort_criteria))
+								continue
 						elif(sorttype == u'playsper'):
-							#var perHr = track.playback_count / Math.round(((new Date()-new Date(track.created_at)) / 3600000));
 							created_time = strptime(track.created_at[:-6],"%Y/%m/%d %H:%M:%S")
-							perhr = track.playback_count / ((time() - mktime(created_time)) / 3600)
-							self.q.put((track.id,perhr))
+							sort_criteria = track.playback_count / ((time() - mktime(created_time)) / 3600)
 						else:
-							self.q.put((track.id,track.playback_count))
+							sort_criteria = track.playback_count
+						self.q.put((trackid,sort_criteria))
 					except AttributeError as ae:
-						print ae
+						#Some users choose to not display playback_count or other info, so just skip these tracks
 						continue
 					except Exception as exp:
 						print exp
