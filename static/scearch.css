@@ -1,0 +1,52 @@
+.center {
+     float: none;
+     margin-left: auto;
+     margin-right: auto;
+}
+
+#header {
+	text-align:center;
+}
+
+#main {
+ margin:0 auto;
+ float:none;
+ position:relative;
+ top:30px;
+}
+
+#inputdiv{
+	margin-left:0px;
+    vertical-align:middle;
+}
+
+#searchinput{
+    width:530px;
+	height:55px;
+	font-size:25px;
+}
+
+#searchbtn{
+    width:169px;
+    float:right;
+}
+
+#sortdiv {
+	float:right;
+	position:relative;
+	bottom:40px;
+}
+
+#sortselectdiv {
+	vertical-align:middle;
+	float:right;
+}
+
+#sortselect {
+	width:108px;
+	vertical-align:middle;
+}
+
+.input-searchbar { 
+    width: 461px; 
+}
