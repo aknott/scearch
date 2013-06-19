@@ -8,7 +8,7 @@ app = Flask(__name__)
 def mainapp():
 	result=""
 	input = request.args.get('searchstr')
-	sorttype = request.args.get('sort')
+	sorttype = request.args.get('sortselect')
 	if((input is not None and sorttype is not None) and input != ""):
 		print "searching " + input + " on " + sorttype
 		searcher = Searcher()

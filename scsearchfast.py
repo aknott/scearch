@@ -1,7 +1,7 @@
 import soundcloud
 import operator
 import ThreadPool
-from time import sleep, time
+from time import sleep, time, strptime, mktime
 from threading import Thread, Lock
 from Queue import Queue
 
@@ -83,22 +83,31 @@ class Searcher:
 					self.lockobj.release()
 					return
 				for track in tracks:
-						try:
-							if(exactString):
-								info = "%s %s" % (track.title,track.description)
-								if(searchstr.lower() not in info.lower()):
-									continue
-							if(sorttype == u'plays'):
-								self.q.put((track.id,track.playback_count))
-							elif(sorttype == u'favorites'):
-								self.q.put((track.id,track.favoritings_count))
-							elif(sorttype == u'hype'):
-								if(track.playback_count > 500):
-									self.q.put((track.id,track.playback_count**(float(track.favoritings_count) / float(track.playback_count))))
-							else:
-								self.q.put((track.id,track.playback_count))
-						except AttributeError:
-							continue
+					try:
+						if(exactString):
+							info = "%s %s" % (track.title,track.description)
+							if(searchstr.lower() not in info.lower()):
+								continue
+						if(sorttype == u'plays'):
+							self.q.put((track.id,track.playback_count))
+						elif(sorttype == u'favorites'):
+							self.q.put((track.id,track.favoritings_count))
+						elif(sorttype == u'hype'):
+							if(track.playback_count > 500):
+								self.q.put((track.id,track.playback_count**(float(track.favoritings_count) / float(track.playback_count))))
+						elif(sorttype == u'playsper'):
+							#var perHr = track.playback_count / Math.round(((new Date()-new Date(track.created_at)) / 3600000));
+							created_time = strptime(track.created_at[:-6],"%Y/%m/%d %H:%M:%S")
+							perhr = track.playback_count / ((time() - mktime(created_time)) / 3600)
+							self.q.put((track.id,perhr))
+						else:
+							self.q.put((track.id,track.playback_count))
+					except AttributeError as ae:
+						print ae
+						continue
+					except Exception as exp:
+						print exp
+						continue
 				self.lockobj.acquire()
 				self.ResultsLeft -= 200
 				self.lockobj.release()

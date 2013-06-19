@@ -14,20 +14,35 @@
 }
 
 #inputdiv{
+	margin-left:0px;
     vertical-align:middle;
 }
 
 #searchinput{
-    width:80%;
+    width:530px;
+	height:55px;
+	font-size:25px;
 }
 
 #searchbtn{
-    width:15%;
+    width:169px;
     float:right;
 }
 
 #sortdiv {
-    float:right;
+	float:right;
+	position:relative;
+	bottom:40px;
+}
+
+#sortselectdiv {
+	vertical-align:middle;
+	float:right;
+}
+
+#sortselect {
+	width:108px;
+	vertical-align:middle;
 }
 
 .input-searchbar { 
@@ -37,7 +52,7 @@
 
 <link href="{{url_for('static', filename='bootstrap.min.css')}}" rel="stylesheet" media="screen">
 <script src="http://connect.soundcloud.com/sdk.js"></script>
-<script src="http://code.jquery.com/jquery.js"></script>
+<script src="http://code.jquery.com/jquery.min.js"></script>
 <script src="{{url_for('static', filename='bootstrap.min.js')}}"></script>
 
 <script>
@@ -45,6 +60,10 @@
         $("#searchtype button").click(function () {
             $("#sortvalue").val($(this).attr("id"));
         });
+		
+		$('#sortselect').change(function () {
+			$("#sortvalue").val($(this).val());
+		});
     });
 </script>
 
@@ -60,21 +79,28 @@ A Better Soundcloud Search
 </center>
 </br>
 <div class="row">
-<div id="inputdiv" class="span9">
+<div id="inputdiv" >
     <form id="searchform">
-            <input type="text" name="searchstr" id="searchinput" class="input-searchbar" onClick="this.select();" placeholder="Search" onkeydown="if (event.keyCode == 13) document.getElementById('search').click()" value="{{input}}">
-            <button type="submit" id="searchbtn" class="btn">Search</button>
-            <div class="row">
-                <div id="sortdiv">
-                Sort By:
+            <input type="text" name="searchstr" id="searchinput" class="input-searchbar" onClick="this.select();" placeholder="Enter keywords here" onkeydown="if (event.keyCode == 13) document.getElementById('search').click()" value="{{input}}">
+			<button type="submit" id="searchbtn" class="btn">Search</button></br>
+                <div id="sortdiv" class="input-prepend">
+					<span class="add-on">Sort By:</span>
+					<select name="sortselect" id="sortselect">
+					  <option value="plays">Plays</option>
+					  <option value="favorites">Favorites</option>
+					  <option value="hype">Hype</option>
+					  <option value="playsper">Plays/hr</option>
+					</select>
+				</div>
+				<!---
                 <div id="searchtype" class="btn-group" data-toggle="buttons-radio">
                     <button id="plays" type="button" class="btn btn active">Plays</button>
                     <button id="favorites" type="button" class="btn btn">Favorites</button>
                     <button id="hype" type="button" class="btn btn">Hype</button>
                 </div>
-                </div>
-            </div>   
-            <input name="sort" type="hidden" id="sortvalue" value="plays"/>
+				-->
+                
+            <!--<input name="sort" type="hidden" id="sortvalue" value="plays"/>-->
     </form>
 </div>
 </div>
