@@ -36,7 +36,7 @@ class Searcher:
 		#kill if shit takes longer than 20 seconds
 		while ((self.ResultsLeft>0) and (time()-starttime < 20.0)):
 			print "%s" % (self.ResultsLeft)
-			sleep(0.50)
+			sleep(1)
 		print time()-starttime    
 		print "facdict is " + str(len(self.favdict.keys())) + " long"
 		
