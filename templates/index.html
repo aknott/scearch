@@ -62,6 +62,16 @@
 <script src="{{url_for('static', filename='bootstrap.min.js')}}"></script>
 
 <script>
+	function getURLParameter(name) {
+		return decodeURI(
+			(RegExp(name + '=' + '(.+?)(&|$)').exec(location.search)||[,null])[1]
+		);
+	}
+
+	$(document).ready(function(){
+		$('#sortselect').val(getURLParameter("sortselect"));
+	});
+	
     $(function() {
         $("#searchtype button").click(function () {
             $("#sortvalue").val($(this).attr("id"));
