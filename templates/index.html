@@ -1,99 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-<style>
-.center {
-     float: none;
-     margin-left: auto;
-     margin-right: auto;
-}
-
-#header {
-	text-align:center;
-}
-
-#main {
- margin:0 auto;
- float:none;
- position:relative;
- top:30px;
-}
-
-#inputdiv{
-	margin-left:0px;
-    vertical-align:middle;
-}
-
-#searchinput{
-    width:530px;
-	height:55px;
-	font-size:25px;
-}
-
-#searchbtn{
-    width:169px;
-    float:right;
-}
-
-#sortdiv {
-	float:right;
-	position:relative;
-	bottom:40px;
-}
-
-#sortselectdiv {
-	vertical-align:middle;
-	float:right;
-}
-
-#sortselect {
-	width:108px;
-	vertical-align:middle;
-}
-
-.input-searchbar { 
-    width: 461px; 
-}
-</style>
-
-<link href="{{url_for('static', filename='bootstrap.min.css')}}" rel="stylesheet" media="screen">
 <script src="http://connect.soundcloud.com/sdk.js"></script>
 <script src="http://code.jquery.com/jquery.min.js"></script>
+<link href="{{url_for('static', filename='bootstrap.min.css')}}" rel="stylesheet" media="screen">
+<link href="{{url_for('static', filename='scearch.css')}}" rel="stylesheet" media="screen">
 <script src="{{url_for('static', filename='bootstrap.min.js')}}"></script>
-
-<script>
-	function getURLParameter(name) {
-		return decodeURI(
-			(RegExp(name + '=' + '(.+?)(&|$)').exec(location.search)||[,null])[1]
-		);
-	}
-
-	$(document).ready(function(){
-		var selected = getURLParameter("sortselect");
-		if(selected !== "null"){
-			$('#sortselect').val(selected);
-		}else {
-			$('#sortselect').val("plays");
-		}
-		
-	});
-	
-    $(function() {
-        $("#searchtype button").click(function () {
-            $("#sortvalue").val($(this).attr("id"));
-        });
-		
-		$('#sortselect').change(function () {
-			$("#sortvalue").val($(this).val());
-		});
-    });
-</script>
-
+<script src="{{url_for('static', filename='scearch.js')}}"></script>
 </head>
+
 <body>
-
-
-
 <div id="main" class="span9">
 <div class="row">
 <div id="header">
