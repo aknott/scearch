@@ -69,7 +69,13 @@
 	}
 
 	$(document).ready(function(){
-		$('#sortselect').val(getURLParameter("sortselect"));
+		var selected = getURLParameter("sortselect");
+		if(selected !== "null"){
+			$('#sortselect').val(selected);
+		}else {
+			$('#sortselect').val("plays");
+		}
+		
 	});
 	
     $(function() {
