@@ -52,11 +52,7 @@ class Searcher:
 			for i in range(0,numresults):
 				trackid = sorted_x[i][0]
 				widget = "<iframe width=\"100%\" height=\"166\" scrolling=\"no\" frameborder=\"no\" src=\"http://w.soundcloud.com/player/?url=http%3A%2F%2Fapi.soundcloud.com%2Ftracks%2F"+str(trackid)+ "\"></iframe>"
-				try:
-					output += "%s</br>" % (widget)
-				except Exception as e:
-					print "got some funky characters here\n" + str(e)
-					continue
+				output += "%s</br>" % (widget)
 		return output
 		
 	def worker(self):
