@@ -114,7 +114,7 @@ def GetTracks(searchstr,offsetnum,sorttype):
 					trackid = track.id
 					sort_criteria = 0
 					if(exactString):
-						info = "%s %s" % (track.title,track.description)
+						info = "%s %s %s" % (track.user["username"],track.title,track.description)
 						if(searchstr.lower() not in info.lower()):
 							continue
 					if(sorttype == u'plays'):
