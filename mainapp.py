@@ -1,6 +1,6 @@
 import os
 from flask import Flask, request, render_template
-from scsearchfast import Searcher
+from scsearchfast import dosearch
 
 app = Flask(__name__)
 
@@ -11,8 +11,7 @@ def mainapp():
 	sorttype = request.args.get('sortselect')
 	if((input is not None and sorttype is not None) and input != ""):
 		print "searching " + input + " on " + sorttype
-		searcher = Searcher()
-		result = searcher.dosearch(input,sorttype)
+		result = dosearch(input,sorttype)
 	if input is None:
 		input = ""
 	return render_template('index.html', input=input,result=result)
