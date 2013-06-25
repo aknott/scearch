@@ -10,7 +10,7 @@ import sys,os
 class Searcher:
 	client = soundcloud.Client(client_id='af912f440f0d027065e7351089b08a52')
 	q = Queue()
-	tp = ThreadPool.ThreadPool(15,20)
+	tp = ThreadPool.ThreadPool(20,20)
 	lockobj = Lock()
 	ResultsLeft = 8000
 	favdict = {}
@@ -125,3 +125,8 @@ class Searcher:
 		self.ResultsLeft -= 200
 		self.lockobj.release()
 
+class SearchResult:
+	def __init__(self,trackid=0,tracktitle="",value=0):
+		self.trackid = trackid
+		self.title = tracktitle
+		self.value = value
