@@ -128,7 +128,6 @@ def GetTracks(searchstr,offsetnum,sorttype):
 						if(track.playback_count > 500):
 							created_time = strptime(track.created_at[:-6],"%Y/%m/%d %H:%M:%S")
 							plays_per = track.playback_count / ((time() - mktime(created_time)) / (3600*24))
-							print plays_per
 							hyperatio = float(track.favoritings_count) / float(track.playback_count)
 							#hype = track.playback_count**(hyperatio)
 							hype = plays_per**(hyperatio)
