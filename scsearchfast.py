@@ -71,8 +71,6 @@ def search():
 		print "%s" % (ResultsLeft)
 		sleep(1)
 	print time()-starttime 
-	print "shutting down threadpool"
-	tp.shutdown(1,2)  
 	print "facdict is " + str(len(favdict.keys())) + " long"
 
 	sorted_x = sorted(favdict.iteritems(), key=operator.itemgetter(1))
