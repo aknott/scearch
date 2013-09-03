@@ -49,6 +49,7 @@ def dosearch(query,type):
 	tracks = cache.get(key=searchstr+":::"+sorttype,createfunc=search)
 	return generateWidgets(tracks)
 
+	
 def search():
 	global ResultsLeft
 	offsetval = 0
@@ -59,19 +60,19 @@ def search():
 	t = Thread(target=worker)
 	t.daemon = True
 	t.start()
-
+	
 	while(offsetval < 8000):
 		tp.add_job(GetTracks,[searchstr,offsetval,sorttype])
 		offsetval += 200
 	
 	starttime = time()
-	
 	#kill if shit takes longer than 20 seconds
 	while ((ResultsLeft>0) and (time()-starttime < 20.0)):
 		print "%s" % (ResultsLeft)
 		sleep(1)
-	
-	print time()-starttime    
+	print time()-starttime 
+	print "shutting down threadpool"
+	tp.shutdown(1,2)  
 	print "facdict is " + str(len(favdict.keys())) + " long"
 
 	sorted_x = sorted(favdict.iteritems(), key=operator.itemgetter(1))
@@ -122,13 +123,15 @@ def GetTracks(searchstr,offsetnum,sorttype):
 					elif(sorttype == u'favorites'):
 						sort_criteria = track.favoritings_count
 					elif(sorttype == u'hype'):
-						#only calculate hype on tracks with more than 300 plays 
+						#only calculate hype on tracks with more than 500 plays 
 						#due to ratio values going too high with low playback
-						if(track.playback_count > 300):
+						if(track.playback_count > 500):
 							created_time = strptime(track.created_at[:-6],"%Y/%m/%d %H:%M:%S")
-							plays_per = track.playback_count / ((time() - mktime(created_time)) / 3600)
+							plays_per = track.playback_count / ((time() - mktime(created_time)) / (3600*24))
+							print plays_per
 							hyperatio = float(track.favoritings_count) / float(track.playback_count)
-							hype = track.playback_count**(hyperatio)
+							#hype = track.playback_count**(hyperatio)
+							hype = plays_per**(hyperatio)
 							sort_criteria = hype
 							q.put((trackid,sort_criteria))
 							continue
