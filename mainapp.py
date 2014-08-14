@@ -1,7 +1,7 @@
 import os
 from flask import Flask, request, render_template
 #from scsearchfast import dosearch
-from scsearchgevent import Searcher
+from search import Searcher
 
 app = Flask(__name__)
 
