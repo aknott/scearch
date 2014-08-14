@@ -21,8 +21,6 @@ cache = cm.get_cache('trackcache', type='dbm', expire=3600*24)
 
 client = soundcloud.Client(client_id='af912f440f0d027065e7351089b08a52')
 
-sortCriterias = {u"plays":3,u"favorites":4,u"hype":6,u"playsper":7}
-
 def getPlaysPer(track):
 	created_time = strptime(track.created_at[:-6],"%Y/%m/%d %H:%M:%S")
 	plays_per = track.playback_count / ((time() - mktime(created_time)) / (3600*24))
@@ -33,9 +31,11 @@ def getHype(track):
 		hyperatio = float(track.favoritings_count) / float(track.playback_count)
 		playsper = getPlaysPer(track)
 		hype = (track.playback_count*playsper)**(hyperatio)
-		#hype = plays_per**(hyperatio)
 		return hype
 	return 0
+
+def makeWidget(trackid):
+	return "<iframe width=\"100%\" height=\"166\" scrolling=\"no\" frameborder=\"no\" src=\"//w.soundcloud.com/player/?url=http%3A%2F%2Fapi.soundcloud.com%2Ftracks%2F"+str(trackid)+"\"></iframe>"
 
 class Searcher:
 	def __init__(self,querystr,sorttype):
@@ -46,7 +46,7 @@ class Searcher:
 	def generateWidgets(self,tracks):
 		widgets = []
 		for track in tracks:
-			widget = "<iframe width=\"100%\" height=\"166\" scrolling=\"no\" frameborder=\"no\" src=\"//w.soundcloud.com/player/?url=http%3A%2F%2Fapi.soundcloud.com%2Ftracks%2F"+str(track[0])+ "\"></iframe>"
+			widget = "<iframe width=\"100%\" height=\"166\" scrolling=\"no\" frameborder=\"no\" src=\"//w.soundcloud.com/player/?url=http%3A%2F%2Fapi.soundcloud.com%2Ftracks%2F"+str(track.id)+ "\"></iframe>"
 			widgets += ["%s</br>" % (widget)]
 		return widgets
 			
@@ -54,17 +54,17 @@ class Searcher:
 		start = clock()
 		tracks = cache.get(key=self.querystr+":::"+self.type,createfunc=self.dosearch)
 		print "Total time: %f" % (clock()-start)
-		return self.generateWidgets(tracks)
+		return tracks
 
 
 	def dosearch(self):
 		for offset in [i*200 for i in range(40)]:
 			pool.spawn(self.getTracks,self.querystr,offset)
 		pool.join()
-		sortcolumn = sortCriterias[self.type]
-		result = sorted(self.results, key=lambda x:x[sortcolumn], reverse=True)[:10]
+		result = sorted(self.results, key=lambda x:x.tosort, reverse=True)[:20]
 		for t in result:
-			print "(%s) %s - %s"%(t[sortcolumn],t[1].encode('ascii', 'ignore'),t[2].encode('ascii', 'ignore'))
+			t.widget = makeWidget(t.id)
+			print "(%s) %s - %s"%(t.tosort,t.username.encode('ascii', 'ignore'),t.title.encode('ascii', 'ignore'))
 		return result
 
 	def getTracks(self,query,offset):
@@ -82,8 +82,8 @@ class Searcher:
 					if(query.lower() not in info.lower()):
 						continue
 				hype = getHype(track)
-				tup = track.id,track.user["username"],track.title,track.playback_count,track.favoritings_count,track.created_at,hype,getPlaysPer(track)
-				self.results.append(tup)
+				result = SearchResult(track,hype,getPlaysPer(track),self.type)
+				self.results.append(result)
 			except AttributeError as ae:
 				continue
 			except Exception as exp:
@@ -93,3 +93,22 @@ class Searcher:
 
 # searcher = Searcher("twerk",'hype')
 # searcher.dosearch()
+class SearchResult():
+	def __init__(self,track,hype,playsper,sorttype):
+		self.id = track.id
+		self.username = track.user["username"]
+		self.title = track.title
+		self.plays = track.playback_count
+		self.favorites = track.favoritings_count
+		self.date = track.created_at
+		self.hype = hype
+		self.playsper = playsper
+		self.widget = ""
+		if(sorttype == "plays"):
+			self.tosort = track.playback_count
+		if(sorttype == "favorites"):
+			self.tosort = track.favoritings_count
+		if(sorttype == "hype"):
+			self.tosort = hype
+		if(sorttype == "playsper"):
+			self.tostor = playsper
