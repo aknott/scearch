@@ -10,3 +10,4 @@ simplejson==3.3.0
 soundcloud==0.3.6
 wsgiref==0.1.2
 Beaker==1.6.4
+gevent==1.0.1
