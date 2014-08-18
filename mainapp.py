@@ -10,6 +10,7 @@ def mainapp():
 	result=""
 	input = request.args.get('searchstr')
 	sorttype = request.args.get('sortselect')
+	results = []
 	if((input is not None and sorttype is not None) and input != ""):
 		searcher = Searcher(input,sorttype)
 		results = searcher.search()
