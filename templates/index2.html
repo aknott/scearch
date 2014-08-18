@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Scearch: A Better Soundcloud Search</title>
+<meta name="description" content="Scearch: A Better Soundcloud Search">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+
+<script src="//code.jquery.com/jquery.min.js"></script>
+<link href="{{url_for('static', filename='bootstrap.min.css')}}" rel="stylesheet" media="screen">
+<link href="{{url_for('static', filename='scearch.css')}}" rel="stylesheet" media="screen">
+<script src="{{url_for('static', filename='bootstrap.min.js')}}"></script>
+<script src="{{url_for('static', filename='scearch.js')}}"></script>
+</head>
+
+<body>
+<div id="main" class="span9">
+<div class="row">
+<div id="header">
+<h2>SCEARCH</h2>
+A Better Soundcloud Search
+</div>
+</div>
+<br>
+<div class="row">
+<div id="inputdiv" >
+    <form id="searchform">
+            <input type="text" name="searchstr" id="searchinput" class="input-searchbar" onClick="this.select();" placeholder="Enter keywords here" onkeydown="if (event.keyCode == 13) document.getElementById('search').click()" value="{{input}}">
+			<button type="submit" id="searchbtn" class="btn">Search</button></br>
+                <div id="sortdiv" class="input-prepend">
+					<span class="add-on">Sort By:</span>
+					<select name="sortselect" id="sortselect">
+					  <option value="plays">Plays</option>
+					  <option value="favorites">Favorites</option>
+					  <option value="hype">Hype</option>
+					  <option value="playsper">Plays/hr</option>
+					</select>
+				</div>
+				<!---
+                <div id="searchtype" class="btn-group" data-toggle="buttons-radio">
+                    <button id="plays" type="button" class="btn btn active">Plays</button>
+                    <button id="favorites" type="button" class="btn btn">Favorites</button>
+                    <button id="hype" type="button" class="btn btn">Hype</button>
+                </div>
+				-->
+                
+            <!--<input name="sort" type="hidden" id="sortvalue" value="plays"/>-->
+    </form>
+</div>
+</div>
+{% for result in results %}
+<div class="row">
+<div>
+   {% autoescape false %}
+    {{ result.widget }}
+   {% endautoescape %}
+</div>
+<div style="text-align:justify">
+<div style="float: left"><b>Plays:</b> {{result.plays}}</div><div style="float: left;margin-left:75px"><b>Favorites:</b> {{result.favorites}} </div> <div style="float:left;margin-left:100px"><b>Hype:</b> {{"%.3f" % result.hype}}</div> <div style="float: right"><b>Plays/hr:</b> {{"%.2f" % result.playsper}}</div>
+</div>
+</div>
+</br>
+{% endfor %}
+<br/>
+<br/><br/>
+<br/>
+<br/>
+<div id="footer">
+<center>
+Returns the top 20 sorted tracks 
+</br>
+<img src="http://developers.soundcloud.com/assets/logo_big_black-75c05c178d54c50c8ff0afbb282d2c21.png" align="bottom"/>
+</center>
+</div>
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-41543000-1', 'herokuapp.com');
+  ga('send', 'pageview');
+
+</script>
+
+</body>
+</html>
